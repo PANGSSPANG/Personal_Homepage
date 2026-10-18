@@ -1,6 +1,6 @@
 ---
 locale: zh
-sample: true
+sample: false
 category: 编程语言
 order: 1
 items:
