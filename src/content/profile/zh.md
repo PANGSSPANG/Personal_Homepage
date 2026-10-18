@@ -3,7 +3,7 @@ locale: zh
 sample: true
 name: 庞帅帅
 headline: 后端工程师，做交易系统与内部工具
-location: 上海
+location: 北京
 email: hello@linyizhou.dev
 socials:
   - label: GitHub

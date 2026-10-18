@@ -3,7 +3,7 @@ locale: en
 sample: true
 name: pang shuaishuai
 headline: Backend engineer building payment and internal tools
-location: Shanghai
+location: Beijing
 email: hello@linyizhou.dev
 socials:
   - label: GitHub
