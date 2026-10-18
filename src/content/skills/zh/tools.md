@@ -1,6 +1,6 @@
 ---
 locale: zh
-sample: true
+sample: false
 category: 工具与平台
 order: 3
 items:
@@ -21,5 +21,3 @@ items:
     level: 熟练
     years: 6
 ---
-
-部署与排障常用的工具，够用但不算专家。
