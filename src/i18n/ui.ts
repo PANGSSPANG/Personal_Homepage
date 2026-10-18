@@ -1,4 +1,4 @@
-export const locales = ['zh', 'en'] as const;
+export const locales = ['zh'] as const;
 export type Locale = (typeof locales)[number];
 
 export interface UIStrings {
@@ -12,7 +12,6 @@ export interface UIStrings {
     present: string;
     backToExperience: string;
     viewCase: string;
-    fallbackBadge: string;
     email: string;
     location: string;
     updated: string;
@@ -32,11 +31,8 @@ export interface UIStrings {
     project: string;
     education: string;
   };
-  switchLabel: string;
-  switchAria: string;
   skipToContent: string;
   menu: string;
-  fallbackNotice: string;
   sampleNotice: string;
   intro: {
     experience: string;
@@ -66,7 +62,6 @@ export const ui: Record<Locale, UIStrings> = {
       present: '至今',
       backToExperience: '返回经历',
       viewCase: '查看案例',
-      fallbackBadge: '中文',
       email: '邮箱',
       location: '所在地',
       updated: '更新于',
@@ -86,11 +81,8 @@ export const ui: Record<Locale, UIStrings> = {
       project: '项目',
       education: '教育',
     },
-    switchLabel: 'EN',
-    switchAria: '切换到英文',
     skipToContent: '跳到主要内容',
     menu: '菜单',
-    fallbackNotice: '本条目暂无英文版，以下为中文原文。',
     sampleNotice: '示例内容，待替换',
     intro: {
       experience: '工作、项目与教育经历，按开始时间从近到远排列。项目可以点开看完整案例。',
@@ -106,58 +98,5 @@ export const ui: Record<Locale, UIStrings> = {
       back: '回到首页',
     },
     footer: '用 Astro 构建的静态主页',
-  },
-  en: {
-    siteName: 'Personal site',
-    nav: {
-      home: 'About',
-      experience: 'Experience',
-      skills: 'Skills',
-    },
-    labels: {
-      present: 'Present',
-      backToExperience: 'Back to experience',
-      viewCase: 'View case study',
-      fallbackBadge: '中文',
-      email: 'Email',
-      location: 'Location',
-      updated: 'Updated',
-      years: 'yrs',
-      resume: 'Résumé PDF',
-    },
-    headings: {
-      about: 'About',
-      selectedWork: 'Selected work',
-      toolkit: 'Toolkit',
-      allExperience: 'All experience',
-      allSkills: 'All skills',
-      contact: 'Contact',
-    },
-    kinds: {
-      work: 'Work',
-      project: 'Project',
-      education: 'Education',
-    },
-    switchLabel: '中文',
-    switchAria: 'Switch to Chinese',
-    skipToContent: 'Skip to content',
-    menu: 'Menu',
-    fallbackNotice: 'This entry is not translated yet. The Chinese original is shown below.',
-    sampleNotice: 'Sample content — replace before publishing.',
-    intro: {
-      experience:
-        'Work, projects and education, newest first. Project entries open into full case studies.',
-      skills: 'Technical skills grouped by category, with level and years of use.',
-    },
-    cta: {
-      experience: 'View experience',
-      skills: 'Browse skills',
-    },
-    notFound: {
-      title: 'Page not found',
-      body: 'There is nothing at this address. The link may be out of date.',
-      back: 'Back home',
-    },
-    footer: 'A static site built with Astro',
   },
 };

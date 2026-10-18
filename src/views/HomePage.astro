@@ -32,16 +32,12 @@ const experienceViews = sortExperienceViews(
 const projects = experienceViews.filter((view) => view.kind === 'project').slice(0, 2);
 
 const skillGroups = (await getSkillPairs())
-  .map((pair) => {
-    const { entry, isFallback } = resolveForLocale(pair, lang);
-    return {
-      slug: pair.slug,
-      category: entry.data.category,
-      order: entry.data.order,
-      items: entry.data.items,
-      isFallback,
-    };
-  })
+  .map((pair) => ({
+    slug: pair.slug,
+    category: pair.zh.data.category,
+    order: pair.zh.data.order,
+    items: pair.zh.data.items,
+  }))
   .sort((a, b) => a.order - b.order);
 ---
 
@@ -90,11 +86,6 @@ const skillGroups = (await getSkillPairs())
               <div class="flex items-center justify-between text-[11px] tracking-[0.16em] text-muted">
                 <span>{String(index + 1).padStart(2, '0')}</span>
                 <span class="flex items-center gap-2">
-                  {project.isFallback && (
-                    <span class="rounded-full border border-line px-2 py-0.5 text-[10px] font-semibold tracking-wide">
-                      {t.labels.fallbackBadge}
-                    </span>
-                  )}
                   <span>{project.period}</span>
                 </span>
               </div>
@@ -140,7 +131,7 @@ const skillGroups = (await getSkillPairs())
       </a>
     </div>
 
-    <SkillSummary lang={lang} groups={skillGroups.slice(0, 3)} />
+    <SkillSummary groups={skillGroups.slice(0, 3)} />
   </section>
 
   <section class="bg-pine text-paper">
@@ -150,11 +141,7 @@ const skillGroups = (await getSkillPairs())
           {t.headings.contact}
         </p>
         <p class="mt-4 max-w-xl font-display text-3xl leading-tight tracking-tight sm:text-4xl">
-          {
-            lang === 'zh'
-              ? '有想聊的项目，或者只是打个招呼，都可以写信给我。'
-              : 'Have a project in mind, or just want to say hello? Email is the best way to reach me.'
-          }
+          有想聊的项目，或者只是打个招呼，都可以写信给我。
         </p>
       </div>
       <div class="flex flex-col items-start gap-3 md:items-end">

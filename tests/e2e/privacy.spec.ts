@@ -23,3 +23,8 @@ test('不生成 sitemap', async ({ request }) => {
   const response = await request.get('/sitemap-index.xml');
   expect(response.status()).toBe(404);
 });
+
+test('只保留中文，/en/ 返回 404', async ({ request }) => {
+  const response = await request.get('/en/');
+  expect(response.status()).toBe(404);
+});

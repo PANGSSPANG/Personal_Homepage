@@ -3,7 +3,7 @@ import '../styles/global.css';
 
 import SampleNotice from '../components/SampleNotice.astro';
 import SiteHeader from '../components/SiteHeader.astro';
-import { alternatePath, localizePath } from '../i18n/routes';
+import { localizePath } from '../i18n/routes';
 import { type Locale, ui } from '../i18n/ui';
 import { getProfilePair, getSiteFlags, resolveForLocale } from '../lib/content';
 
@@ -27,7 +27,7 @@ const year = new Date().getFullYear();
 ---
 
 <!doctype html>
-<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,12 +40,7 @@ const year = new Date().getFullYear();
   <body class="flex min-h-screen flex-col">
     <a class="skip-link" href="#main">{t.skipToContent}</a>
     {hasSample && <SampleNotice lang={lang} />}
-    <SiteHeader
-      lang={lang}
-      name={profile.data.name}
-      path={path}
-      alternateHref={alternatePath(path)}
-    />
+    <SiteHeader lang={lang} name={profile.data.name} path={path} />
 
     <main id="main" class="flex-1">
       <slot />

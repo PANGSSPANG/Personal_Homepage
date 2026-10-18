@@ -1,6 +1,6 @@
 # 个人主页
 
-一个 Astro 5 静态个人主页：中文为主、英文可选，缺英文时自动回退中文；只有项目有案例详情页；全站不收录、无统计、无鉴权。
+一个 Astro 5 静态个人主页：只保留中文，包含个人信息、经历、能力与项目案例详情页；全站不收录、无统计、无鉴权。
 
 当前内容全部是 `sample: true` 的虚拟示例，页面顶部会显示「示例内容，待替换」。按下面的步骤替换成自己的信息即可。
 
@@ -42,28 +42,27 @@ pnpm check:release    # 发布前检查：示例内容必须清零
 注意：
 
 - 后台不在本站的 `/admin`，站点不暴露管理入口；权限由 GitHub 仓库协作者控制。
-- 新建中英文条目时，两边文件名（slug）必须完全一致，否则 `pnpm check:release` / 构建会报错。
+- 新建条目时文件名（slug）确定后不要随意改，否则会破坏详情页链接。
 - 正文插图上传后会进 `public/uploads/`，引用路径是 `/uploads/...`；已有案例图仍在 `public/projects/`。
 - 没有实时预览；保存后等重建，或本地 `pnpm dev` 看效果。
-- 草稿用 `draft: true`，构建时整对排除。
+- 草稿用 `draft: true`，构建时排除。
 
 ## 替换示例内容
 
 可以在 Pages CMS 里改，也可以直接改 Markdown：
 
-| 内容                           | 文件                                                    |
-| ------------------------------ | ------------------------------------------------------- |
-| 个人信息、简介、邮箱、社交链接 | `src/content/profile/zh.md`，英文可选 `en.md`           |
-| 工作 / 项目 / 教育经历         | `src/content/experience/zh/<slug>.md`，英文可选同名文件 |
-| 能力分类                       | `src/content/skills/zh/<slug>.md`，英文可选同名文件     |
-| 已有案例图片                   | `public/projects/<slug>/`                               |
-| 后台上传的图片                 | `public/uploads/`                                       |
+| 内容                           | 文件                                      |
+| ------------------------------ | ----------------------------------------- |
+| 个人信息、简介、邮箱、社交链接 | `src/content/profile/zh.md`               |
+| 工作 / 项目 / 教育经历         | `src/content/experience/zh/<slug>.md`     |
+| 能力分类                       | `src/content/skills/zh/<slug>.md`         |
+| 已有案例图片                   | `public/projects/<slug>/`                 |
+| 后台上传的图片                 | `public/uploads/`                         |
 
 规则：
 
-- 中文必填，英文可选。英文文件名必须与中文完全相同。
+- 站点只有中文，没有 `/en/` 路由，也没有语言切换按钮。
 - 只有 `kind: 'project'` 会生成详情页，且正文必须非空；`work` / `education` 不能写正文。
-- 缺英文时英文页面回退中文，并显示「This entry is not translated yet.」提示。
 - 替换真实内容后，把 frontmatter 里的 `sample: true` 删掉；全部清零后顶部示例横幅自动消失。
 - 上线前跑 `pnpm check:release`，它会在仍有示例内容时失败并列出 slug。
 
@@ -79,7 +78,7 @@ pnpm check:release    # 发布前检查：示例内容必须清零
 
 ## 设计说明
 
-- 页面：首页、经历、项目案例、能力、404，中英各一套路由。
-- 语言切换是普通链接，不依赖 JavaScript，也不记忆选择。
+- 页面：首页、经历、项目案例、能力、404，全部为中文。
+- 没有中英文切换，也没有英文版本。
 - 后台用 Pages CMS（Git 型），不引入数据库、后端 API 或统计脚本。
 - 详细需求与实现约定见 `PRD.md`、`docs/tech-design.md`、`AGENTS.md`。

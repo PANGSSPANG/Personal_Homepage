@@ -9,7 +9,6 @@ export type SkillEntry = CollectionEntry<'skills'>;
 export interface Pair<T> {
   slug: string;
   zh: T;
-  en: T | null;
 }
 
 export interface Resolved<T> {
@@ -22,41 +21,22 @@ export function slugFromId(id: string): string {
   return parts.slice(1).join('/');
 }
 
-export function localeFromId(id: string): Locale {
-  const [prefix] = id.split('/');
-  return prefix === 'en' ? 'en' : 'zh';
-}
-
 function pairEntries<T extends { id: string; data: { locale: Locale } }>(entries: T[]): Pair<T>[] {
-  const buckets = new Map<string, { zh?: T; en?: T }>();
-
-  for (const entry of entries) {
-    const slug = slugFromId(entry.id);
-    const bucket = buckets.get(slug) ?? {};
-    if (localeFromId(entry.id) === 'en') bucket.en = entry;
-    else bucket.zh = entry;
-    buckets.set(slug, bucket);
-  }
-
-  return [...buckets.entries()]
-    .filter(([, bucket]) => Boolean(bucket.zh))
-    .map(([slug, bucket]) => ({
-      slug,
-      zh: bucket.zh as T,
-      en: bucket.en ?? null,
-    }));
+  return entries.map((entry) => ({
+    slug: slugFromId(entry.id),
+    zh: entry,
+  }));
 }
 
 export async function getProfilePair(): Promise<Pair<ProfileEntry>> {
   const entries = await getCollection('profile');
   const zh = entries.find((entry) => entry.id === 'zh');
-  const en = entries.find((entry) => entry.id === 'en') ?? null;
 
   if (!zh) {
     throw new Error('缺少 src/content/profile/zh.md，中文个人信息是必填内容。');
   }
 
-  return { slug: 'profile', zh, en };
+  return { slug: 'profile', zh };
 }
 
 export async function getExperiencePairs(): Promise<Pair<ExperienceEntry>[]> {
@@ -83,9 +63,8 @@ export async function getSkillPairs(): Promise<Pair<SkillEntry>[]> {
 }
 
 export function resolveForLocale<T>(pair: Pair<T>, locale: Locale): Resolved<T> {
-  if (locale === 'zh') return { entry: pair.zh, isFallback: false };
-  if (pair.en) return { entry: pair.en, isFallback: false };
-  return { entry: pair.zh, isFallback: true };
+  void locale;
+  return { entry: pair.zh, isFallback: false };
 }
 
 export async function getSiteFlags(): Promise<{ hasSample: boolean }> {

@@ -1,11 +1,10 @@
 ---
 import { render } from 'astro:content';
 
-import FallbackNotice from '../components/FallbackNotice.astro';
 import { localizePath } from '../i18n/routes';
 import { type Locale, ui } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getExperiencePair, resolveForLocale } from '../lib/content';
+import { getExperiencePair } from '../lib/content';
 import { buildExperienceView } from '../lib/experiences';
 
 interface Props {
@@ -17,7 +16,7 @@ const { lang, slug } = Astro.props;
 const t = ui[lang];
 
 const pair = await getExperiencePair(slug);
-const { entry, isFallback } = resolveForLocale(pair, lang);
+const entry = pair.zh;
 
 if (entry.data.kind !== 'project') {
   throw new Error(`只有项目类型有详情页：${slug}`);
@@ -37,14 +36,6 @@ const backHref = localizePath('/experience/', lang);
       <span class="transition group-hover:-translate-x-0.5" aria-hidden="true">←</span>
       {t.labels.backToExperience}
     </a>
-
-    {
-      isFallback && (
-        <div class="mt-8">
-          <FallbackNotice lang={lang} />
-        </div>
-      )
-    }
 
     <header class="mt-8 border-b border-line pb-8">
       <p class="eyebrow">
@@ -71,7 +62,7 @@ const backHref = localizePath('/experience/', lang);
       }
     </header>
 
-    <div class="prose mt-10" lang={isFallback ? 'zh-CN' : undefined}>
+    <div class="prose mt-10">
       <Content />
     </div>
 

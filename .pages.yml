@@ -1,4 +1,4 @@
-# Pages CMS 配置：Git 型后台
+# Pages CMS 配置：中文站，Git 型后台
 # 使用方式：https://app.pagescms.org 登录 GitHub，选择本仓库即可编辑。
 # 保存后会提交到仓库，Cloudflare Pages 自动重新构建。
 
@@ -13,578 +13,283 @@ media:
 content:
   - name: profile
     label: 个人信息
-    type: group
-    items:
-      - name: profile-zh
-        label: 个人信息（中文）
-        type: file
-        path: src/content/profile/zh.md
-        format: yaml-frontmatter
-        operations:
-          create: false
-          delete: false
+    type: file
+    path: src/content/profile/zh.md
+    format: yaml-frontmatter
+    operations:
+      create: false
+      delete: false
+    fields:
+      - name: locale
+        label: 语言
+        type: select
+        readonly: true
+        default: zh
+        options:
+          values:
+            - name: zh
+              label: 中文
+      - name: sample
+        label: 示例内容
+        type: boolean
+        default: false
+        description: 替换成真实内容后关闭，页面顶部提示会消失。
+      - name: name
+        label: 姓名
+        type: string
+        required: true
+        options:
+          maxlength: 40
+      - name: headline
+        label: 一句话定位
+        type: string
+        required: true
+        options:
+          maxlength: 60
+      - name: location
+        label: 所在地
+        type: string
+        required: true
+        options:
+          maxlength: 40
+      - name: email
+        label: 邮箱
+        type: string
+        required: true
+        pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+      - name: avatar
+        label: 头像文件名
+        type: string
+        description: 例如 avatar.jpg，文件放在 src/assets/；留空则用姓名首字。
+      - name: socials
+        label: 社交链接
+        type: object
+        list: true
         fields:
-          - name: locale
-            label: 语言
-            type: select
-            readonly: true
-            default: zh
-            options:
-              values:
-                - name: zh
-                  label: 中文
-          - name: sample
-            label: 示例内容
-            type: boolean
-            default: false
-            description: 替换成真实内容后关闭，页面顶部提示会消失。
-          - name: name
-            label: 姓名
+          - name: label
+            label: 名称
             type: string
             required: true
-            options:
-              maxlength: 40
-          - name: headline
-            label: 一句话定位
+          - name: url
+            label: 链接
             type: string
             required: true
-            options:
-              maxlength: 60
-          - name: location
-            label: 所在地
+            pattern: "^https?://"
+          - name: icon
+            label: 图标
             type: string
-            required: true
-            options:
-              maxlength: 40
-          - name: email
-            label: 邮箱
-            type: string
-            required: true
-            pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
-          - name: avatar
-            label: 头像文件名
-            type: string
-            description: 例如 avatar.jpg，文件放在 src/assets/；留空则用姓名首字。
-          - name: socials
-            label: 社交链接
-            type: object
-            list: true
-            fields:
-              - name: label
-                label: 名称
-                type: string
-                required: true
-              - name: url
-                label: 链接
-                type: string
-                required: true
-                pattern: "^https?://"
-              - name: icon
-                label: 图标
-                type: string
-          - name: resumeUrl
-            label: 简历地址
-            type: string
-            description: 例如 /resume.pdf；留空则不显示下载入口。
-          - name: updated
-            label: 更新时间
-            type: date
-            required: true
-            options:
-              format: yyyy-MM-dd
-          - name: body
-            label: 个人简介
-            type: rich-text
-            required: true
-            options:
-              format: markdown
-              media: uploads
-              switcher: true
-
-      - name: profile-en
-        label: Profile (English)
-        type: file
-        path: src/content/profile/en.md
-        format: yaml-frontmatter
-        operations:
-          create: false
-          delete: false
-        fields:
-          - name: locale
-            label: Language
-            type: select
-            readonly: true
-            default: en
-            options:
-              values:
-                - name: en
-                  label: English
-          - name: sample
-            label: Sample content
-            type: boolean
-            default: false
-            description: Turn off after replacing with real content.
-          - name: name
-            label: Name
-            type: string
-            required: true
-            options:
-              maxlength: 40
-          - name: headline
-            label: Headline
-            type: string
-            required: true
-            options:
-              maxlength: 60
-          - name: location
-            label: Location
-            type: string
-            required: true
-            options:
-              maxlength: 40
-          - name: email
-            label: Email
-            type: string
-            required: true
-            pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
-          - name: avatar
-            label: Avatar filename
-            type: string
-            description: e.g. avatar.jpg in src/assets/; leave empty to use initials.
-          - name: socials
-            label: Social links
-            type: object
-            list: true
-            fields:
-              - name: label
-                label: Label
-                type: string
-                required: true
-              - name: url
-                label: URL
-                type: string
-                required: true
-                pattern: "^https?://"
-              - name: icon
-                label: Icon
-                type: string
-          - name: resumeUrl
-            label: Résumé URL
-            type: string
-            description: e.g. /resume.pdf; leave empty to hide the link.
-          - name: updated
-            label: Updated
-            type: date
-            required: true
-            options:
-              format: yyyy-MM-dd
-          - name: body
-            label: Bio
-            type: rich-text
-            required: true
-            options:
-              format: markdown
-              media: uploads
-              switcher: true
+      - name: resumeUrl
+        label: 简历地址
+        type: string
+        description: 例如 /resume.pdf；留空则不显示下载入口。
+      - name: updated
+        label: 更新时间
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: body
+        label: 个人简介
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: uploads
+          switcher: true
 
   - name: experience
     label: 经历
-    type: group
-    items:
-      - name: experience-zh
-        label: 经历（中文）
-        type: collection
-        path: src/content/experience/zh
-        format: yaml-frontmatter
-        subfolders: false
-        filename:
-          template: "{primary}.md"
-          field: create
-        operations:
-          rename: false
-        view:
-          fields: [title, kind, start, end, draft, sample]
-          primary: title
-          sort: [start, title]
-          default:
-            sort: start
-            order: desc
+    type: collection
+    path: src/content/experience/zh
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{primary}.md"
+      field: create
+    operations:
+      rename: false
+    view:
+      fields: [title, kind, start, end, draft, sample]
+      primary: title
+      sort: [start, title]
+      default:
+        sort: start
+        order: desc
+    fields:
+      - name: locale
+        label: 语言
+        type: select
+        readonly: true
+        default: zh
+        options:
+          values:
+            - name: zh
+              label: 中文
+      - name: sample
+        label: 示例内容
+        type: boolean
+        default: false
+      - name: kind
+        label: 类型
+        type: select
+        required: true
+        options:
+          values:
+            - name: work
+              label: 工作
+            - name: project
+              label: 项目
+            - name: education
+              label: 教育
+      - name: title
+        label: 角色 / 项目名
+        type: string
+        required: true
+        options:
+          maxlength: 60
+      - name: org
+        label: 公司 / 组织 / 学校
+        type: string
+        required: true
+        options:
+          maxlength: 60
+      - name: start
+        label: 开始时间
+        type: string
+        required: true
+        pattern: "^\\d{4}-(0[1-9]|1[0-2])$"
+        description: 格式 YYYY-MM，例如 2024-03。
+      - name: end
+        label: 结束时间
+        type: string
+        description: 格式 YYYY-MM；留空表示「至今」。
+      - name: location
+        label: 地点
+        type: string
+        options:
+          maxlength: 40
+      - name: summary
+        label: 一句话概述
+        type: text
+        required: true
+        options:
+          maxlength: 120
+      - name: highlights
+        label: 要点
+        type: string
+        list:
+          max: 5
+      - name: tags
+        label: 能力标签
+        type: string
+        list: true
+      - name: links
+        label: 相关链接
+        type: object
+        list: true
         fields:
-          - name: locale
-            label: 语言
-            type: select
-            readonly: true
-            default: zh
-            options:
-              values:
-                - name: zh
-                  label: 中文
-          - name: sample
-            label: 示例内容
-            type: boolean
-            default: false
-          - name: kind
-            label: 类型
-            type: select
-            required: true
-            options:
-              values:
-                - name: work
-                  label: 工作
-                - name: project
-                  label: 项目
-                - name: education
-                  label: 教育
-          - name: title
-            label: 角色 / 项目名
+          - name: label
+            label: 名称
             type: string
             required: true
-            options:
-              maxlength: 60
-          - name: org
-            label: 公司 / 组织 / 学校
+          - name: url
+            label: 链接
             type: string
             required: true
-            options:
-              maxlength: 60
-          - name: start
-            label: 开始时间
-            type: string
-            required: true
-            pattern: "^\\d{4}-(0[1-9]|1[0-2])$"
-            description: 格式 YYYY-MM，例如 2024-03。
-          - name: end
-            label: 结束时间
-            type: string
-            description: 格式 YYYY-MM；留空表示「至今」。
-          - name: location
-            label: 地点
-            type: string
-            options:
-              maxlength: 40
-          - name: summary
-            label: 一句话概述
-            type: text
-            required: true
-            options:
-              maxlength: 120
-          - name: highlights
-            label: 要点
-            type: string
-            list:
-              max: 5
-          - name: tags
-            label: 能力标签
-            type: string
-            list: true
-          - name: links
-            label: 相关链接
-            type: object
-            list: true
-            fields:
-              - name: label
-                label: 名称
-                type: string
-                required: true
-              - name: url
-                label: 链接
-                type: string
-                required: true
-                pattern: "^https?://"
-          - name: draft
-            label: 草稿
-            type: boolean
-            default: false
-          - name: body
-            label: 案例正文
-            type: rich-text
-            description: 只有项目需要填写；工作与教育留空。
-            options:
-              format: markdown
-              media: uploads
-              switcher: true
-
-      - name: experience-en
-        label: Experience (English)
-        type: collection
-        path: src/content/experience/en
-        format: yaml-frontmatter
-        subfolders: false
-        filename:
-          template: "{primary}.md"
-          field: create
-        operations:
-          rename: false
-        view:
-          fields: [title, kind, start, end, draft, sample]
-          primary: title
-          sort: [start, title]
-          default:
-            sort: start
-            order: desc
-        fields:
-          - name: locale
-            label: Language
-            type: select
-            readonly: true
-            default: en
-            options:
-              values:
-                - name: en
-                  label: English
-          - name: sample
-            label: Sample content
-            type: boolean
-            default: false
-          - name: kind
-            label: Kind
-            type: select
-            required: true
-            options:
-              values:
-                - name: work
-                  label: Work
-                - name: project
-                  label: Project
-                - name: education
-                  label: Education
-          - name: title
-            label: Role / project
-            type: string
-            required: true
-            options:
-              maxlength: 60
-          - name: org
-            label: Company / organization / school
-            type: string
-            required: true
-            options:
-              maxlength: 60
-          - name: start
-            label: Start
-            type: string
-            required: true
-            pattern: "^\\d{4}-(0[1-9]|1[0-2])$"
-            description: YYYY-MM, e.g. 2024-03.
-          - name: end
-            label: End
-            type: string
-            description: YYYY-MM; leave empty for Present.
-          - name: location
-            label: Location
-            type: string
-            options:
-              maxlength: 40
-          - name: summary
-            label: Summary
-            type: text
-            required: true
-            options:
-              maxlength: 120
-          - name: highlights
-            label: Highlights
-            type: string
-            list:
-              max: 5
-          - name: tags
-            label: Tags
-            type: string
-            list: true
-          - name: links
-            label: Links
-            type: object
-            list: true
-            fields:
-              - name: label
-                label: Label
-                type: string
-                required: true
-              - name: url
-                label: URL
-                type: string
-                required: true
-                pattern: "^https?://"
-          - name: draft
-            label: Draft
-            type: boolean
-            default: false
-          - name: body
-            label: Case study
-            type: rich-text
-            description: Required for projects; leave empty for work and education.
-            options:
-              format: markdown
-              media: uploads
-              switcher: true
+            pattern: "^https?://"
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+      - name: body
+        label: 案例正文
+        type: rich-text
+        description: 只有项目需要填写；工作与教育留空。
+        options:
+          format: markdown
+          media: uploads
+          switcher: true
 
   - name: skills
     label: 能力
-    type: group
-    items:
-      - name: skills-zh
-        label: 能力（中文）
-        type: collection
-        path: src/content/skills/zh
-        format: yaml-frontmatter
-        subfolders: false
-        filename:
-          template: "{primary}.md"
-          field: create
-        operations:
-          rename: false
-        view:
-          fields: [category, order]
-          primary: category
-          sort: [order]
-          default:
-            sort: order
-            order: asc
+    type: collection
+    path: src/content/skills/zh
+    format: yaml-frontmatter
+    subfolders: false
+    filename:
+      template: "{primary}.md"
+      field: create
+    operations:
+      rename: false
+    view:
+      fields: [category, order]
+      primary: category
+      sort: [order]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: locale
+        label: 语言
+        type: select
+        readonly: true
+        default: zh
+        options:
+          values:
+            - name: zh
+              label: 中文
+      - name: sample
+        label: 示例内容
+        type: boolean
+        default: false
+      - name: category
+        label: 分类名
+        type: string
+        required: true
+        options:
+          maxlength: 20
+      - name: order
+        label: 排序
+        type: number
+        required: true
+        default: 1
+        options:
+          min: 0
+      - name: items
+        label: 能力条目
+        type: object
+        required: true
+        list:
+          min: 1
+          collapsible: true
         fields:
-          - name: locale
-            label: 语言
-            type: select
-            readonly: true
-            default: zh
-            options:
-              values:
-                - name: zh
-                  label: 中文
-          - name: sample
-            label: 示例内容
-            type: boolean
-            default: false
-          - name: category
-            label: 分类名
+          - name: name
+            label: 名称
             type: string
             required: true
             options:
-              maxlength: 20
-          - name: order
-            label: 排序
-            type: number
-            required: true
-            default: 1
-            options:
-              min: 0
-          - name: items
-            label: 能力条目
-            type: object
-            required: true
-            list:
-              min: 1
-              collapsible: true
-            fields:
-              - name: name
-                label: 名称
-                type: string
-                required: true
-                options:
-                  maxlength: 30
-              - name: level
-                label: 熟练度
-                type: select
-                options:
-                  values:
-                    - name: 了解
-                      label: 了解
-                    - name: 熟悉
-                      label: 熟悉
-                    - name: 熟练
-                      label: 熟练
-                    - name: 精通
-                      label: 精通
-              - name: years
-                label: 年限
-                type: number
-                options:
-                  min: 0
-                  max: 50
-              - name: note
-                label: 备注
-                type: string
-                options:
-                  maxlength: 60
-
-      - name: skills-en
-        label: Skills (English)
-        type: collection
-        path: src/content/skills/en
-        format: yaml-frontmatter
-        subfolders: false
-        filename:
-          template: "{primary}.md"
-          field: create
-        operations:
-          rename: false
-        view:
-          fields: [category, order]
-          primary: category
-          sort: [order]
-          default:
-            sort: order
-            order: asc
-        fields:
-          - name: locale
-            label: Language
+              maxlength: 30
+          - name: level
+            label: 熟练度
             type: select
-            readonly: true
-            default: en
             options:
               values:
-                - name: en
-                  label: English
-          - name: sample
-            label: Sample content
-            type: boolean
-            default: false
-          - name: category
-            label: Category
-            type: string
-            required: true
-            options:
-              maxlength: 20
-          - name: order
-            label: Order
+                - name: 了解
+                  label: 了解
+                - name: 熟悉
+                  label: 熟悉
+                - name: 熟练
+                  label: 熟练
+                - name: 精通
+                  label: 精通
+          - name: years
+            label: 年限
             type: number
-            required: true
-            default: 1
             options:
               min: 0
-          - name: items
-            label: Items
-            type: object
-            required: true
-            list:
-              min: 1
-              collapsible: true
-            fields:
-              - name: name
-                label: Name
-                type: string
-                required: true
-                options:
-                  maxlength: 30
-              - name: level
-                label: Level
-                type: select
-                options:
-                  values:
-                    - name: Basic
-                      label: Basic
-                    - name: Familiar
-                      label: Familiar
-                    - name: Proficient
-                      label: Proficient
-                    - name: Expert
-                      label: Expert
-              - name: years
-                label: Years
-                type: number
-                options:
-                  min: 0
-                  max: 50
-              - name: note
-                label: Note
-                type: string
-                options:
-                  maxlength: 60
+              max: 50
+          - name: note
+            label: 备注
+            type: string
+            options:
+              maxlength: 60

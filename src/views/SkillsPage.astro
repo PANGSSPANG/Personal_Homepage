@@ -2,7 +2,7 @@
 import SkillGroup from '../components/SkillGroup.astro';
 import { type Locale, ui } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getSkillPairs, resolveForLocale } from '../lib/content';
+import { getSkillPairs } from '../lib/content';
 
 interface Props {
   lang: Locale;
@@ -12,16 +12,12 @@ const { lang } = Astro.props;
 const t = ui[lang];
 
 const groups = (await getSkillPairs())
-  .map((pair) => {
-    const { entry, isFallback } = resolveForLocale(pair, lang);
-    return {
-      slug: pair.slug,
-      category: entry.data.category,
-      order: entry.data.order,
-      items: entry.data.items,
-      isFallback,
-    };
-  })
+  .map((pair) => ({
+    slug: pair.slug,
+    category: pair.zh.data.category,
+    order: pair.zh.data.order,
+    items: pair.zh.data.items,
+  }))
   .sort((a, b) => a.order - b.order);
 ---
 
@@ -40,12 +36,7 @@ const groups = (await getSkillPairs())
     <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {
         groups.map((group) => (
-          <SkillGroup
-            lang={lang}
-            category={group.category}
-            items={group.items}
-            isFallback={group.isFallback}
-          />
+          <SkillGroup lang={lang} category={group.category} items={group.items} />
         ))
       }
     </div>

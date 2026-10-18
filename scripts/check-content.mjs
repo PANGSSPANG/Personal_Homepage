@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * 内容门禁：检查中文必填、英文可选、英文不能独立存在、项目正文、
- * 示例内容与待翻译条目统计。
+ * 内容门禁：中文站版本。
+ * 检查中文内容是否存在、项目正文、示例内容数量。
  *
  * 用法：
- *   node scripts/check-content.mjs            日常构建检查（示例/回退只警告）
+ *   node scripts/check-content.mjs            日常构建检查（示例只警告）
  *   node scripts/check-content.mjs --release  发布检查（示例未清零则失败）
  */
 import { readdir, readFile } from 'node:fs/promises';
@@ -17,7 +17,6 @@ const RELEASE = process.argv.includes('--release');
 const errors = [];
 const warnings = [];
 const samples = [];
-const fallbacks = [];
 
 function fail(message) {
   errors.push(message);
@@ -119,117 +118,79 @@ async function loadEntry(file) {
   return { file: relative, data, body };
 }
 
-async function loadLocaleDir(dir) {
+async function loadCollection(dir) {
   const files = await listMarkdown(dir);
-  const entries = new Map();
+  const entries = [];
 
   for (const name of files) {
     const entry = await loadEntry(path.join(dir, name));
-    const slug = name.replace(/\.md$/, '');
-    entries.set(slug, entry);
+    entries.push({ slug: name.replace(/\.md$/, ''), ...entry });
   }
 
   return entries;
 }
 
-function sameValue(a, b) {
-  return JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
-}
-
 async function main() {
-  const profileZh = await loadEntry(path.join(CONTENT_DIR, 'profile', 'zh.md')).catch(() => null);
-  if (!profileZh) fail('缺少 src/content/profile/zh.md（中文个人信息必填）');
-  if (!profileZh?.file) fail('无法读取中文个人信息');
+  const profile = await loadEntry(path.join(CONTENT_DIR, 'profile', 'zh.md')).catch(() => null);
+  if (!profile) {
+    fail('缺少 src/content/profile/zh.md（中文个人信息必填）');
+  }
 
-  const profileEn = await loadEntry(path.join(CONTENT_DIR, 'profile', 'en.md')).catch(() => null);
-  if (!profileEn) fallbacks.push('profile');
+  const experiences = await loadCollection(path.join(CONTENT_DIR, 'experience', 'zh'));
+  const skills = await loadCollection(path.join(CONTENT_DIR, 'skills', 'zh'));
 
-  const experience = {
-    zh: await loadLocaleDir(path.join(CONTENT_DIR, 'experience', 'zh')),
-    en: await loadLocaleDir(path.join(CONTENT_DIR, 'experience', 'en')),
-  };
-  const skills = {
-    zh: await loadLocaleDir(path.join(CONTENT_DIR, 'skills', 'zh')),
-    en: await loadLocaleDir(path.join(CONTENT_DIR, 'skills', 'en')),
-  };
+  if (experiences.length === 0) {
+    fail('至少需要一条中文经历（experience/zh/*.md）');
+  }
+  if (skills.length === 0) {
+    fail('至少需要一个中文能力分类（skills/zh/*.md）');
+  }
 
-  if (experience.zh.size === 0) fail('至少需要一条中文经历（experience/zh/*.md）');
-  if (skills.zh.size === 0) fail('至少需要一个中文能力分类（skills/zh/*.md）');
+  for (const entry of experiences) {
+    if (entry.data.locale !== 'zh') {
+      fail(`${entry.file}: locale 应为 zh`);
+    }
+    if (!entry.data.kind) {
+      fail(`${entry.file}: 缺少 kind`);
+    }
+    if (entry.data.sample === true) {
+      samples.push(`experience/${entry.slug}`);
+    }
+    if (entry.data.draft === true) continue;
 
-  for (const [locale, entries] of Object.entries(experience)) {
-    for (const [slug, entry] of entries) {
-      if (entry.data.locale !== locale) {
-        fail(`${entry.file}: locale 应为 ${locale}，实际为 ${entry.data.locale}`);
-      }
-      if (!entry.data.kind) fail(`${entry.file}: 缺少 kind`);
-      if (entry.data.sample === true) samples.push(`experience/${locale}/${slug}`);
-      if (entry.data.draft === true) continue;
-
-      if (entry.data.kind === 'project') {
-        if (!entry.body) fail(`${entry.file}: 项目必须有案例正文`);
-      } else if (entry.body) {
-        fail(`${entry.file}: 只有项目可以写案例正文，${entry.data.kind} 的正文必须为空`);
-      }
+    if (entry.data.kind === 'project') {
+      if (!entry.body) fail(`${entry.file}: 项目必须有案例正文`);
+    } else if (entry.body) {
+      fail(`${entry.file}: 只有项目可以写案例正文，${entry.data.kind} 的正文必须为空`);
     }
   }
 
-  for (const [slug, enEntry] of experience.en) {
-    const zhEntry = experience.zh.get(slug);
-    if (!zhEntry) {
-      fail(`${enEntry.file}: 英文条目没有对应的中文源（${slug}）`);
-      continue;
+  for (const entry of skills) {
+    if (entry.data.locale !== 'zh') {
+      fail(`${entry.file}: locale 应为 zh`);
     }
-    for (const field of ['kind', 'start', 'end', 'draft', 'sample']) {
-      if (!sameValue(zhEntry.data[field], enEntry.data[field])) {
-        fail(
-          `${enEntry.file}: 字段 ${field} 与中文源不一致（zh=${JSON.stringify(
-            zhEntry.data[field],
-          )}, en=${JSON.stringify(enEntry.data[field])}）`,
-        );
-      }
+    if (!Array.isArray(entry.data.items) || entry.data.items.length === 0) {
+      fail(`${entry.file}: items 至少需要一项`);
+    }
+    if (entry.data.sample === true) {
+      samples.push(`skills/${entry.slug}`);
     }
   }
 
-  for (const [slug] of experience.zh) {
-    if (!experience.en.has(slug)) fallbacks.push(`experience/${slug}`);
+  if (profile?.data.sample === true) {
+    samples.push('profile/zh');
   }
-
-  for (const [locale, entries] of Object.entries(skills)) {
-    for (const [slug, entry] of entries) {
-      if (entry.data.locale !== locale) {
-        fail(`${entry.file}: locale 应为 ${locale}，实际为 ${entry.data.locale}`);
-      }
-      if (!Array.isArray(entry.data.items) || entry.data.items.length === 0) {
-        fail(`${entry.file}: items 至少需要一项`);
-      }
-      if (entry.data.sample === true) samples.push(`skills/${locale}/${slug}`);
-    }
-  }
-
-  for (const [slug, enEntry] of skills.en) {
-    if (!skills.zh.has(slug)) {
-      fail(`${enEntry.file}: 英文能力分类没有对应的中文源（${slug}）`);
-    }
-  }
-
-  for (const [slug] of skills.zh) {
-    if (!skills.en.has(slug)) fallbacks.push(`skills/${slug}`);
-  }
-
-  const skillNames = new Set();
 
   // 能力名从原始 Markdown 中提取，用于检查经历标签的软引用。
-  for (const locale of ['zh', 'en']) {
-    const dir = path.join(CONTENT_DIR, 'skills', locale);
-    for (const name of await listMarkdown(dir)) {
-      const source = await readFile(path.join(dir, name), 'utf8');
-      for (const match of source.matchAll(/^\s*-\s*name:\s*(.+)$/gm)) {
-        skillNames.add(match[1].trim());
-      }
+  const skillNames = new Set();
+  for (const name of await listMarkdown(path.join(CONTENT_DIR, 'skills', 'zh'))) {
+    const source = await readFile(path.join(CONTENT_DIR, 'skills', 'zh', name), 'utf8');
+    for (const match of source.matchAll(/^\s*-\s*name:\s*(.+)$/gm)) {
+      skillNames.add(match[1].trim());
     }
   }
 
-  for (const entry of experience.zh.values()) {
+  for (const entry of experiences) {
     if (!Array.isArray(entry.data.tags)) continue;
     for (const tag of entry.data.tags) {
       if (!skillNames.has(tag)) {
@@ -238,28 +199,15 @@ async function main() {
     }
   }
 
-  if (profileZh?.data.sample === true) samples.push('profile/zh');
-  if (profileEn?.data.sample === true) samples.push('profile/en');
-
   if (RELEASE && samples.length > 0) {
     fail(`发布检查失败：仍有 ${samples.length} 条示例内容，请替换并删除 sample 标记`);
   }
 
-  if (profileZh) {
-    console.log(
-      `✓ 中文内容：profile 1，experience ${experience.zh.size}，skills ${skills.zh.size}`,
-    );
+  if (profile) {
+    console.log(`✓ 中文内容：profile 1，experience ${experiences.length}，skills ${skills.length}`);
   }
-  console.log(
-    `  英文覆盖：profile ${profileEn ? '有' : '回退'}，experience ${
-      experience.zh.size - fallbacks.filter((item) => item.startsWith('experience/')).length
-    }/${experience.zh.size}，skills ${
-      skills.zh.size - fallbacks.filter((item) => item.startsWith('skills/')).length
-    }/${skills.zh.size}`,
-  );
 
   for (const warning of warnings) console.warn(`! ${warning}`);
-  for (const fallback of fallbacks) console.warn(`  [i18n] 回退中文：${fallback}`);
   if (samples.length > 0) {
     console.log(`  [sample] ${samples.length} 条示例内容：${samples.join(', ')}`);
   }
@@ -271,7 +219,7 @@ async function main() {
   }
 
   console.log(
-    RELEASE ? '\n✓ 发布检查通过：没有残留示例内容' : '\n✓ 内容检查通过（示例与回退不阻断构建）',
+    RELEASE ? '\n✓ 发布检查通过：没有残留示例内容' : '\n✓ 内容检查通过（示例不阻断构建）',
   );
 }
 

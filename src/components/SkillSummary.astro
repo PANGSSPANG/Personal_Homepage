@@ -1,19 +1,14 @@
 ---
-import { type Locale, ui } from '../i18n/ui';
-
 interface Group {
   category: string;
   items: { name: string }[];
-  isFallback: boolean;
 }
 
 interface Props {
-  lang: Locale;
   groups: Group[];
 }
 
-const { lang, groups } = Astro.props;
-const t = ui[lang];
+const { groups } = Astro.props;
 ---
 
 <div class="mt-9 grid gap-x-10 gap-y-8 border-t border-ink/15 pt-8 md:grid-cols-3">
@@ -22,11 +17,6 @@ const t = ui[lang];
       <section>
         <div class="flex items-baseline justify-between gap-2">
           <h3 class="font-display text-lg tracking-tight">{group.category}</h3>
-          {group.isFallback && (
-            <span class="rounded-full border border-line px-2 py-0.5 text-[10px] font-semibold tracking-wide text-muted">
-              {t.labels.fallbackBadge}
-            </span>
-          )}
         </div>
 
         <ul class="mt-4 flex flex-wrap gap-2">

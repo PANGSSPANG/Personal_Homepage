@@ -47,7 +47,7 @@ export function buildExperienceView(
     highlights: data.highlights,
     tags: data.tags,
     links: data.links,
-    href: data.kind === 'project' ? experiencePath(pair.slug, locale) : null,
+    href: data.kind === 'project' ? experiencePath(pair.slug) : null,
     isFallback,
     start: data.start,
     end: data.end,

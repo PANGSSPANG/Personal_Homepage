@@ -1,7 +1,7 @@
 import { glob } from 'astro/loaders';
 import { defineCollection, z } from 'astro:content';
 
-const locale = z.enum(['zh', 'en']);
+const locale = z.literal('zh');
 const month = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, '日期格式必须是 YYYY-MM');
 
 // Pages CMS 会把留空的字段写成空字符串，这里统一转成 undefined / null，

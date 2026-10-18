@@ -1,23 +1,21 @@
 ---
 import { localizePath } from '../i18n/routes';
 import { type Locale, ui } from '../i18n/ui';
-import LanguageSwitch from './LanguageSwitch.astro';
 
 interface Props {
   lang: Locale;
   name: string;
   path: string;
-  alternateHref: string;
 }
 
-const { lang, name, path, alternateHref } = Astro.props;
+const { lang, name, path } = Astro.props;
 const t = ui[lang];
 
 const items = [
   {
     label: t.nav.home,
     href: localizePath('/', lang),
-    active: path === '/' || path === '/en/',
+    active: path === '/',
   },
   {
     label: t.nav.experience,
@@ -60,8 +58,6 @@ const items = [
     </nav>
 
     <div class="flex items-center gap-2">
-      <LanguageSwitch lang={lang} href={alternateHref} />
-
       <details class="relative md:hidden">
         <summary
           class="flex h-9 cursor-pointer list-none items-center rounded-full border border-line bg-surface px-3 text-xs font-semibold text-ink [&::-webkit-details-marker]:hidden"
