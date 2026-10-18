@@ -1,0 +1,53 @@
+---
+import SkillGroup from '../components/SkillGroup.astro';
+import { type Locale, ui } from '../i18n/ui';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSkillPairs, resolveForLocale } from '../lib/content';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const groups = (await getSkillPairs())
+  .map((pair) => {
+    const { entry, isFallback } = resolveForLocale(pair, lang);
+    return {
+      slug: pair.slug,
+      category: entry.data.category,
+      order: entry.data.order,
+      items: entry.data.items,
+      isFallback,
+    };
+  })
+  .sort((a, b) => a.order - b.order);
+---
+
+<BaseLayout lang={lang} title={t.nav.skills}>
+  <section class="border-b border-line">
+    <div class="shell py-14 md:py-20">
+      <p class="eyebrow">{t.nav.skills}</p>
+      <h1 class="mt-4 font-display text-5xl tracking-tight sm:text-6xl">
+        {t.headings.allSkills}
+      </h1>
+      <p class="mt-5 max-w-2xl text-[15px] leading-7 text-ink/70">{t.intro.skills}</p>
+    </div>
+  </section>
+
+  <section class="shell py-12 md:py-16">
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        groups.map((group) => (
+          <SkillGroup
+            lang={lang}
+            category={group.category}
+            items={group.items}
+            isFallback={group.isFallback}
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

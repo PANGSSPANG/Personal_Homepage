@@ -1,0 +1,16 @@
+---
+import { type Locale, ui } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<div
+  class="bg-accent px-4 py-2 text-center text-[11px] font-semibold tracking-[0.14em] text-paper"
+  data-sample-notice
+>
+  {ui[lang].sampleNotice}
+</div>

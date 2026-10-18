@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+preview-shots/
+.pnpm-store/
+.pnpm-home/
+.corepack/
+.npm-cache/
+*.bak-*
+.DS_Store
+Thumbs.db
+*.log

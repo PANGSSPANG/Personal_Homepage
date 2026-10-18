@@ -1,0 +1,32 @@
+---
+import type { Locale } from '../i18n/ui';
+import type { ExperienceGroup } from '../lib/experiences';
+import ExperienceCard from './ExperienceCard.astro';
+
+interface Props {
+  lang: Locale;
+  groups: ExperienceGroup[];
+}
+
+const { lang, groups } = Astro.props;
+---
+
+<div class="space-y-14">
+  {
+    groups.map((group) => (
+      <section>
+        <div class="flex items-baseline justify-between border-b border-ink/15 pb-3">
+          <h2 class="font-display text-2xl tracking-tight">{group.label}</h2>
+          <span class="text-[11px] font-medium tracking-[0.18em] text-muted">
+            {String(group.items.length).padStart(2, '0')}
+          </span>
+        </div>
+        <div class="mt-2">
+          {group.items.map((item) => (
+            <ExperienceCard lang={lang} view={item} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</div>

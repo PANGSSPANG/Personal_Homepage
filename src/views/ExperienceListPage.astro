@@ -1,0 +1,36 @@
+---
+import ExperienceTimeline from '../components/ExperienceTimeline.astro';
+import { type Locale, ui } from '../i18n/ui';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPublishedExperiencePairs } from '../lib/content';
+import { buildExperienceView, groupExperienceViews, sortExperienceViews } from '../lib/experiences';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const pairs = await getPublishedExperiencePairs();
+const views = sortExperienceViews(
+  pairs.map((pair) => buildExperienceView(pair, lang, t.labels.present)),
+);
+const groups = groupExperienceViews(views, t.kinds);
+---
+
+<BaseLayout lang={lang} title={t.nav.experience}>
+  <section class="border-b border-line">
+    <div class="shell py-14 md:py-20">
+      <p class="eyebrow">{t.nav.experience}</p>
+      <h1 class="mt-4 font-display text-5xl tracking-tight sm:text-6xl">
+        {t.headings.allExperience}
+      </h1>
+      <p class="mt-5 max-w-2xl text-[15px] leading-7 text-ink/70">{t.intro.experience}</p>
+    </div>
+  </section>
+
+  <section class="shell py-12 md:py-16">
+    <ExperienceTimeline lang={lang} groups={groups} />
+  </section>
+</BaseLayout>

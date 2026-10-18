@@ -1,0 +1,50 @@
+---
+interface Social {
+  label: string;
+  url: string;
+}
+
+interface Props {
+  email?: string;
+  socials: Social[];
+  compact?: boolean;
+}
+
+const { email, socials, compact = false } = Astro.props;
+---
+
+<ul class:list={['space-y-1.5 text-sm', compact && 'text-[13px]']}>
+  {
+    email && (
+      <li>
+        <a
+          href={`mailto:${email}`}
+          class="group inline-flex items-center gap-2 text-ink/75 transition hover:text-accent"
+        >
+          <span class="text-muted">@</span>
+          <span class="break-all">{email}</span>
+          <span class="text-accent opacity-0 transition group-hover:opacity-100" aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      </li>
+    )
+  }
+  {
+    socials.map((social) => (
+      <li>
+        <a
+          href={social.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-2 text-ink/75 transition hover:text-accent"
+        >
+          <span class="text-muted" aria-hidden="true">
+            ↗
+          </span>
+          <span>{social.label}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

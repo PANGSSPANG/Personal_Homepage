@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Orion checkout rebuild</title>
+  <desc id="desc">A flow diagram with order, payment and ledger nodes converging into one state machine.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10201f"/>
+      <stop offset="1" stop-color="#1d3531"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f2a65a"/>
+      <stop offset="1" stop-color="#e56b4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.14" stroke="#e8e2d6" stroke-width="1">
+    <path d="M0 90h1200M0 180h1200M0 270h1200M0 360h1200M0 450h1200M0 540h1200"/>
+    <path d="M90 0v630M180 0v630M270 0v630M360 0v630M450 0v630M540 0v630M630 0v630M720 0v630M810 0v630M900 0v630M990 0v630M1080 0v630"/>
+  </g>
+  <g fill="#e8e2d6" font-family="Georgia, 'Times New Roman', serif">
+    <text x="72" y="112" font-size="22" letter-spacing="7" opacity="0.7">CASE STUDY 01</text>
+    <text x="72" y="212" font-size="78" font-weight="700">Orion</text>
+    <text x="72" y="282" font-size="42" opacity="0.82">Checkout rebuild</text>
+    <text x="72" y="344" font-size="22" opacity="0.55" font-family="Arial, sans-serif">One settlement flow, observable and replayable.</text>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="17">
+    <g fill="#0f1c1b">
+      <rect x="72" y="420" width="170" height="66" rx="12" fill="#e8e2d6"/>
+      <rect x="292" y="420" width="170" height="66" rx="12" fill="#e8e2d6"/>
+      <rect x="512" y="420" width="170" height="66" rx="12" fill="#e8e2d6"/>
+    </g>
+    <g fill="#10201f" text-anchor="middle">
+      <text x="157" y="459">Order</text>
+      <text x="377" y="459">Payment</text>
+      <text x="597" y="459">Ledger</text>
+    </g>
+    <g stroke="#f2a65a" stroke-width="2" fill="none">
+      <path d="M242 453h50"/>
+      <path d="M462 453h50"/>
+      <path d="M682 453h64"/>
+    </g>
+    <path d="M730 426h180a20 20 0 0 1 20 20v14a20 20 0 0 1-20 20H730" fill="none" stroke="url(#accent)" stroke-width="2.5"/>
+    <text x="742" y="486" fill="#f2a65a" font-size="16">State machine</text>
+    <g fill="#f2a65a">
+      <circle cx="242" cy="453" r="4"/>
+      <circle cx="462" cy="453" r="4"/>
+      <circle cx="682" cy="453" r="4"/>
+    </g>
+  </g>
+  <g fill="#e8e2d6" font-family="Arial, sans-serif" text-anchor="end">
+    <text x="1128" y="566" font-size="18" opacity="0.8">99.6% settled</text>
+    <text x="1128" y="596" font-size="15" opacity="0.45">6 min reconciliation</text>
+  </g>
+</svg>

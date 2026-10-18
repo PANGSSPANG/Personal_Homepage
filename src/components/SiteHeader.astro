@@ -1,0 +1,91 @@
+---
+import { localizePath } from '../i18n/routes';
+import { type Locale, ui } from '../i18n/ui';
+import LanguageSwitch from './LanguageSwitch.astro';
+
+interface Props {
+  lang: Locale;
+  name: string;
+  path: string;
+  alternateHref: string;
+}
+
+const { lang, name, path, alternateHref } = Astro.props;
+const t = ui[lang];
+
+const items = [
+  {
+    label: t.nav.home,
+    href: localizePath('/', lang),
+    active: path === '/' || path === '/en/',
+  },
+  {
+    label: t.nav.experience,
+    href: localizePath('/experience/', lang),
+    active: path.includes('/experience/'),
+  },
+  {
+    label: t.nav.skills,
+    href: localizePath('/skills/', lang),
+    active: path.includes('/skills/'),
+  },
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-line/80 bg-paper/90 backdrop-blur-md">
+  <div class="shell flex h-16 items-center justify-between gap-4">
+    <a href={localizePath('/', lang)} class="group flex items-center gap-3">
+      <span
+        class="flex h-9 w-9 items-center justify-center rounded-lg bg-pine font-display text-lg text-paper transition group-hover:bg-accent"
+        aria-hidden="true">{name.slice(0, 1)}</span
+      >
+      <span class="hidden text-[13px] font-semibold tracking-[0.12em] sm:block">{name}</span>
+    </a>
+
+    <nav class="hidden items-center gap-1 md:flex" aria-label={t.nav.home}>
+      {
+        items.map((item) => (
+          <a
+            href={item.href}
+            class:list={[
+              'rounded-full px-3.5 py-2 text-[13px] font-medium transition',
+              item.active ? 'bg-ink text-paper' : 'text-ink/65 hover:bg-ink/5 hover:text-ink',
+            ]}
+            aria-current={item.active ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <LanguageSwitch lang={lang} href={alternateHref} />
+
+      <details class="relative md:hidden">
+        <summary
+          class="flex h-9 cursor-pointer list-none items-center rounded-full border border-line bg-surface px-3 text-xs font-semibold text-ink [&::-webkit-details-marker]:hidden"
+        >
+          {t.menu}
+        </summary>
+        <div
+          class="absolute right-0 top-11 z-50 w-44 rounded-xl border border-line bg-surface p-2 shadow-xl"
+        >
+          {
+            items.map((item) => (
+              <a
+                href={item.href}
+                class:list={[
+                  'block rounded-lg px-3 py-2 text-sm',
+                  item.active ? 'bg-ink text-paper' : 'text-ink/75 hover:bg-ink/5',
+                ]}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </details>
+    </div>
+  </div>
+</header>

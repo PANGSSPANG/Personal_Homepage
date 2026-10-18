@@ -1,0 +1,18 @@
+---
+import type { GetStaticPaths } from 'astro';
+
+import { getPublishedExperiencePairs } from '../../lib/content';
+import ExperienceDetailPage from '../../views/ExperienceDetailPage.astro';
+
+export const getStaticPaths = (async () => {
+  const pairs = await getPublishedExperiencePairs();
+
+  return pairs
+    .filter((pair) => pair.zh.data.kind === 'project')
+    .map((pair) => ({ params: { slug: pair.slug } }));
+}) satisfies GetStaticPaths;
+
+const { slug } = Astro.params;
+---
+
+<ExperienceDetailPage lang="zh" slug={slug as string} />

@@ -1,0 +1,87 @@
+---
+import { type Locale, ui } from '../i18n/ui';
+import type { ExperienceView } from '../lib/experiences';
+
+interface Props {
+  lang: Locale;
+  view: ExperienceView;
+}
+
+const { lang, view } = Astro.props;
+const t = ui[lang];
+---
+
+<article id={view.slug} class="scroll-mt-24 border-t border-line py-8 first:border-t-0">
+  <div class="grid gap-4 md:grid-cols-[180px_1fr] md:gap-10">
+    <div class="flex flex-wrap items-center gap-3 md:block">
+      <p class="text-[12px] font-medium tracking-wide text-muted">{view.period}</p>
+      {
+        view.isFallback && (
+          <span class="inline-flex rounded-full border border-line px-2 py-0.5 text-[10px] font-semibold tracking-wide text-muted md:mt-2">
+            {t.labels.fallbackBadge}
+          </span>
+        )
+      }
+    </div>
+
+    <div>
+      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+        <h3 class="font-display text-2xl leading-snug tracking-tight">
+          {
+            view.href ? (
+              <a href={view.href} class="transition hover:text-accent">
+                {view.title}
+              </a>
+            ) : (
+              view.title
+            )
+          }
+        </h3>
+        {
+          view.href && (
+            <a
+              href={view.href}
+              class="group inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide text-accent"
+            >
+              {t.labels.viewCase}
+              <span class="transition group-hover:translate-x-0.5" aria-hidden="true">
+                →
+              </span>
+            </a>
+          )
+        }
+      </div>
+
+      <p class="mt-1 text-sm text-ink/55">
+        {view.org}{view.location ? ` · ${view.location}` : ''}
+      </p>
+
+      <p class="mt-4 max-w-2xl text-[15px] leading-7 text-ink/80">{view.summary}</p>
+
+      {
+        view.highlights.length > 0 && (
+          <ul class="mt-4 max-w-2xl space-y-2 text-[14px] leading-6 text-ink/75">
+            {view.highlights.map((item) => (
+              <li class="flex gap-3">
+                <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      {
+        view.tags.length > 0 && (
+          <ul class="mt-5 flex flex-wrap gap-2">
+            {view.tags.map((tag) => (
+              <li class="rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] font-medium text-ink/65">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</article>

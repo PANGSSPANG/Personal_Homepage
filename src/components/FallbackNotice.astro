@@ -1,0 +1,17 @@
+---
+import { type Locale, ui } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<div
+  class="mb-8 flex items-start gap-3 rounded-xl border border-amber-800/20 bg-amber-100/70 px-4 py-3 text-sm leading-6 text-amber-950"
+  data-fallback-notice
+>
+  <span aria-hidden="true" class="mt-0.5 text-base">↩</span>
+  <p>{ui[lang].fallbackNotice}</p>
+</div>

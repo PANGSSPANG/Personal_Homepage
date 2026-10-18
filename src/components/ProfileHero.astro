@@ -1,0 +1,121 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+import { localizePath } from '../i18n/routes';
+import { type Locale, ui } from '../i18n/ui';
+import type { ProfileEntry } from '../lib/content';
+import ContactLinks from './ContactLinks.astro';
+
+interface Props {
+  lang: Locale;
+  profile: ProfileEntry['data'];
+}
+
+const { lang, profile } = Astro.props;
+const t = ui[lang];
+
+const avatars = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true },
+);
+const avatarFile = profile.avatar?.replace(/^.*assets\//, '');
+const avatar = avatarFile ? avatars[`/src/assets/${avatarFile}`]?.default : undefined;
+---
+
+<section class="relative overflow-hidden border-b border-line">
+  <div class="grid-paper absolute inset-0 opacity-40" aria-hidden="true"></div>
+  <div class="shell relative grid gap-12 py-16 md:py-24 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
+    <div>
+      <p class="eyebrow">{lang === 'zh' ? '个人主页 · 2026' : 'PERSONAL SITE · 2026'}</p>
+      <h1
+        class="mt-5 max-w-3xl font-display text-6xl leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-[5.6rem]"
+      >
+        {profile.name}
+      </h1>
+      <p class="mt-6 max-w-xl text-xl leading-8 text-ink/80 sm:text-2xl">
+        {profile.headline}
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted">
+        <span class="inline-flex items-center gap-2">
+          <span class="h-1.5 w-1.5 rounded-full bg-pine" aria-hidden="true"></span>
+          {profile.location}
+        </span>
+        <a
+          href={`mailto:${profile.email}`}
+          class="underline decoration-line underline-offset-4 transition hover:text-accent hover:decoration-accent"
+        >
+          {profile.email}
+        </a>
+      </div>
+
+      <div class="mt-9 flex flex-wrap gap-3">
+        <a
+          href={localizePath('/experience/', lang)}
+          class="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-pine"
+        >
+          {t.cta.experience}
+          <span aria-hidden="true">→</span>
+        </a>
+        <a
+          href={localizePath('/skills/', lang)}
+          class="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium text-ink transition hover:border-accent hover:text-accent"
+        >
+          {t.cta.skills}
+        </a>
+        {
+          profile.resumeUrl && (
+            <a
+              href={profile.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full border border-ink/20 px-5 py-2.5 text-sm font-medium text-ink transition hover:border-accent hover:text-accent"
+            >
+              {t.labels.resume}
+              <span aria-hidden="true">↗</span>
+            </a>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="lg:pb-2">
+      <div
+        class="relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-line bg-surface p-6 shadow-[0_30px_80px_-50px_rgba(27,36,33,0.55)]"
+      >
+        <div
+          class="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-muted"
+        >
+          <span>{lang === 'zh' ? '上海 · 中国' : 'SHANGHAI · CN'}</span>
+          <span>31.23°N</span>
+        </div>
+
+        <div class="flex flex-1 items-center justify-center py-6">
+          {
+            avatar ? (
+              <Image
+                src={avatar}
+                alt={profile.name}
+                widths={[320, 480]}
+                sizes="(min-width: 1024px) 320px, 70vw"
+                class="h-full w-full rounded-2xl object-cover"
+              />
+            ) : (
+              <span
+                class="select-none font-display text-[9rem] leading-none text-pine/90"
+                aria-hidden="true"
+              >
+                {profile.name.slice(0, 1)}
+              </span>
+            )
+          }
+        </div>
+
+        <div class="border-t border-line pt-4">
+          <ContactLinks email={profile.email} socials={profile.socials} compact />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

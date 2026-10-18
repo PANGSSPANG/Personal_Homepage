@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f5f1e8;
+  --color-surface: #fffdf7;
+  --color-ink: #1b2421;
+  --color-muted: #63706a;
+  --color-line: #ddd4c5;
+  --color-accent: #b4552d;
+  --color-accent-soft: #efdfd2;
+  --color-pine: #1f3a34;
+  --font-display:
+    'Iowan Old Style', 'Palatino Linotype', 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC',
+    serif;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei',
+    sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', Menlo, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+  }
+
+  :where(a, button, summary):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.24em] text-muted;
+  }
+
+  .grid-paper {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--color-line) 55%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-line) 55%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 44px 44px;
+  }
+
+  .prose {
+    @apply max-w-none text-[15.5px] leading-7 text-ink/85;
+  }
+
+  .prose > * + * {
+    @apply mt-4;
+  }
+
+  .prose h2 {
+    @apply mt-11 mb-4 font-display text-2xl font-semibold tracking-tight text-ink;
+  }
+
+  .prose h3 {
+    @apply mt-8 mb-3 text-lg font-semibold tracking-tight text-ink;
+  }
+
+  .prose ul {
+    @apply list-disc space-y-2 pl-5 marker:text-accent;
+  }
+
+  .prose ol {
+    @apply list-decimal space-y-2 pl-5 marker:text-accent;
+  }
+
+  .prose blockquote {
+    @apply border-l-2 border-accent/60 pl-5 font-display text-lg italic text-ink/70;
+  }
+
+  .prose code {
+    @apply rounded bg-ink/5 px-1.5 py-0.5 font-mono text-[0.9em];
+  }
+
+  .prose a {
+    @apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent;
+  }
+
+  .prose strong {
+    @apply font-semibold text-ink;
+  }
+
+  .prose img {
+    @apply mt-8 w-full rounded-xl border border-line;
+  }
+
+  .prose hr {
+    @apply my-10 border-line;
+  }
+
+  .prose table {
+    @apply w-full border-collapse text-left text-sm;
+  }
+
+  .prose th,
+  .prose td {
+    @apply border-b border-line py-2 pr-4 align-top;
+  }
+
+  .skip-link {
+    @apply absolute left-4 top-4 z-50 -translate-y-24 rounded-full bg-ink px-4 py-2 text-sm text-paper transition-transform focus:translate-y-0;
+  }
+}
