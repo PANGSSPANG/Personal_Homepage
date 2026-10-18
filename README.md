@@ -51,13 +51,13 @@ pnpm check:release    # 发布前检查：示例内容必须清零
 
 可以在 Pages CMS 里改，也可以直接改 Markdown：
 
-| 内容                           | 文件                                      |
-| ------------------------------ | ----------------------------------------- |
-| 个人信息、简介、邮箱、社交链接 | `src/content/profile/zh.md`               |
-| 工作 / 项目 / 教育经历         | `src/content/experience/zh/<slug>.md`     |
-| 能力分类                       | `src/content/skills/zh/<slug>.md`         |
-| 已有案例图片                   | `public/projects/<slug>/`                 |
-| 后台上传的图片                 | `public/uploads/`                         |
+| 内容                           | 文件                                  |
+| ------------------------------ | ------------------------------------- |
+| 个人信息、简介、邮箱、社交链接 | `src/content/profile/zh.md`           |
+| 工作 / 项目 / 教育经历         | `src/content/experience/zh/<slug>.md` |
+| 能力分类                       | `src/content/skills/zh/<slug>.md`     |
+| 已有案例图片                   | `public/projects/<slug>/`             |
+| 后台上传的图片                 | `public/uploads/`                     |
 
 规则：
 
