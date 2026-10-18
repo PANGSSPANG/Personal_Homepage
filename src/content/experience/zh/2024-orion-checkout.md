@@ -1,6 +1,6 @@
 ---
 locale: zh
-sample: true
+sample: false
 kind: education
 title: 学生
 org: 大连海事大学
