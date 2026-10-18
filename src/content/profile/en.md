@@ -1,7 +1,7 @@
 ---
 locale: en
 sample: true
-name: Lin Yizhou
+name: pang shuaishuai
 headline: Backend engineer building payment and internal tools
 location: Shanghai
 email: hello@linyizhou.dev
