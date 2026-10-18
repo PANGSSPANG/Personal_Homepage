@@ -1,21 +1,19 @@
 ---
 locale: zh
 sample: true
-kind: work
-title: 后端工程师
-org: Acme Cloud
-start: 2022-07
-end: 2024-02
-location: 上海
-summary: 负责订单与库存服务的日常迭代，参与过一次大促前的容量评估。
+kind: education
+title: 学生
+org: 大连海事大学
+start: 2026-02
+end: 2026-07
+location: 大连
+summary: 使用.net实现网页书店的开发
 highlights:
-  - 把订单查询的慢接口从 1.8 秒优化到 220 毫秒。
-  - 参与大促容量评估，梳理出 6 个需要提前扩容的服务。
-  - 维护服务端错误码与重试规范，减少跨团队联调成本。
+  - 数据库开发
+  - 网站平面设计
+  - 交互设计
 tags:
   - Node.js
-  - PostgreSQL
-  - Kubernetes
-links: []
+  - SQLserve
 draft: false
 ---
