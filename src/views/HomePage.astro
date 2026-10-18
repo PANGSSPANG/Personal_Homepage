@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 
 import ProfileHero from '../components/ProfileHero.astro';
-import SkillGroup from '../components/SkillGroup.astro';
+import SkillSummary from '../components/SkillSummary.astro';
 import { localizePath } from '../i18n/routes';
 import { type Locale, ui } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -140,20 +140,7 @@ const skillGroups = (await getSkillPairs())
       </a>
     </div>
 
-    <div class="mt-9 grid gap-5 md:grid-cols-3">
-      {
-        skillGroups
-          .slice(0, 3)
-          .map((group) => (
-            <SkillGroup
-              lang={lang}
-              category={group.category}
-              items={group.items.slice(0, 4)}
-              isFallback={group.isFallback}
-            />
-          ))
-      }
-    </div>
+    <SkillSummary lang={lang} groups={skillGroups.slice(0, 3)} />
   </section>
 
   <section class="bg-pine text-paper">
