@@ -1,28 +1,26 @@
 ---
 locale: zh
 sample: true
-kind: project
-title: Orion 结算台重构
-org: Orion Commerce
-start: 2024-03
-end: null
-location: 上海
-summary: 把分散在三个服务里的结算逻辑收拢成一条可观测的支付链路，失败可定位、可重放。
+kind: education
+title: 学生
+org: 大连海事大学
+start: 2026-02
+end: 2026-07
+location: 大连
+summary: 小组实现第一节小米杯项目要求
 highlights:
-  - 结算成功率从 92% 提升到 99.6%，平均对账时间从 40 分钟降到 6 分钟。
-  - 引入幂等键与状态机，重复回调与超时重试不再产生重复入账。
-  - 为运营搭了失败单看板，常见异常可以在 10 分钟内定位到具体环节。
+  - 负责机器狗动作设置与自动化
+  - 编程实现路径识别
+  - 引入ai识别，识别二维码与箭头
 tags:
   - TypeScript
   - Node.js
-  - PostgreSQL
   - Redis
 links:
   - label: 项目说明
     url: https://github.com/linyizhou/orion-checkout
 draft: false
 ---
-
 ## 背景
 
 Orion 的结算逻辑原本散在订单、支付、账务三个服务里。每次出现「钱扣了但订单没结」的问题，排查要从三个日志系统里拼时间线，平均要花半天。财务每天还要手工对一次账，月底尤其容易出错。
@@ -41,7 +39,7 @@ Orion 的结算逻辑原本散在订单、支付、账务三个服务里。每�
 2. **幂等**：每个回调带幂等键，重复请求只返回已有结果；超时重试走同一套幂等逻辑。
 3. **可观测**：每个状态迁移写一条结构化事件，带上订单号、渠道、耗时与失败原因，看板按事件聚合。
 
-<img src="/projects/2024-orion-checkout/cover.svg" width="1200" height="630" alt="结算链路从三个服务收敛为一个状态机的示意图" />
+![结算链路从三个服务收敛为一个状态机的示意图](projects/2024-orion-checkout/cover.svg)
 
 ## 结果
 
